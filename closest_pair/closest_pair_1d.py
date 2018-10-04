@@ -2,37 +2,12 @@
 problem."""
 import numpy as np
 
+from brute_force_closest_pair import brute_force_closest_pair
 
-def dist(x, y):
+def dist_1d(x, y):
     return abs(x - y)
 
-
-def brute_force_closest_pair(points):
-    """
-    Brute force closest pair algorithm.
-
-    Args:
-        points (list): list of points with some distance metric between them
-
-    Returns:
-        min_distance: minimum distance between points
-        min_points: set of pair of points that are closest_pair
-    """
-    if len(points) == 1:
-        return None, None
-
-    min_distance = dist(points[0], points[1])
-    min_points = set([points[0], points[1]])
-    for i in range(len(points)):
-        for j in range(i + 1, len(points)):
-            if dist(points[i], points[j]) < min_distance:
-                min_distance = dist(points[i], points[j])
-                min_points = set([points[i], points[j]])
-
-    return min_distance, min_points
-
-
-def closest_pair(points):
+def closest_pair(points, dist=dist_1d):
     """
     Divide and conquer implementation of closest pair algorithm.
 
@@ -45,7 +20,7 @@ def closest_pair(points):
     """
 
     if len(points) <= 3:
-        return brute_force_closest_pair(points)
+        return brute_force_closest_pair(points, dist=dist)
 
     median = np.median(points)
     lower = [p for p in points if p < median]
@@ -73,9 +48,8 @@ def closest_pair(points):
 
 
 def main():
-    points = np.random.rand(10)
-    print(points)
-    print(brute_force_closest_pair(points))
+    points = np.random.rand(20)
+    print(brute_force_closest_pair(points, dist=dist_1d))
     print(closest_pair(points))
 
 
