@@ -1,5 +1,10 @@
 import numpy as np
 
+
+def dist_euclidean(x, y):
+    return np.linalg.norm(np.array(x) - np.array(y))
+
+
 def brute_force_closest_pair(points, dist):
     """
     Brute force closest pair algorithm.

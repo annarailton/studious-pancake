@@ -3,10 +3,7 @@ problem."""
 import numpy as np
 
 from brute_force_closest_pair import brute_force_closest_pair
-
-
-def dist_2d(x, y):
-    return np.linalg.norm(np.array(x) - np.array(y))
+from brute_force_closest_pair import dist_euclidean
 
 
 def project(points, x_value):
@@ -19,7 +16,7 @@ def project(points, x_value):
     return points
 
 
-def closest_pair_2d(points, dist=dist_2d):
+def closest_pair_2d(points, dist=dist_euclidean):
     """
     Divide and conquer implementation of closest pair algorithm in 2D.
 
@@ -78,7 +75,7 @@ def closest_pair_2d(points, dist=dist_2d):
 def main():
     points = np.random.rand(20, 2)
     print(closest_pair_2d(points))
-    print(brute_force_closest_pair(points, dist=dist_2d))
+    print(brute_force_closest_pair(points, dist=dist_euclidean))
 
 
 if __name__ == '__main__':
