@@ -1,3 +1,5 @@
+import numpy as np
+
 def brute_force_closest_pair(points, dist):
     """
     Brute force closest pair algorithm.
@@ -12,12 +14,17 @@ def brute_force_closest_pair(points, dist):
     if len(points) == 1:
         return None, None
 
-    min_distance = dist(points[0], points[1])
-    min_points = set([points[0], points[1]])
-    for i in range(len(points)):
-        for j in range(i + 1, len(points)):
-            if dist(points[i], points[j]) < min_distance:
-                min_distance = dist(points[i], points[j])
-                min_points = set([points[i], points[j]])
+    # Expand dims so always > 1 (can then use row index)
+    points = np.array(points)
+    if points.ndim == 1:
+        points = np.expand_dims(points, axis=1)
+
+    min_distance = dist(points[0, :], points[1, :])
+    min_points = tuple([points[0, :], points[1, :]])
+    for i in range(points.shape[0]):
+        for j in range(i + 1, points.shape[0]):
+            if dist(points[i, :], points[j, :]) < min_distance:
+                min_distance = dist(points[i, :], points[j, :])
+                min_points = tuple([points[i, :], points[j, :]])
 
     return min_distance, min_points

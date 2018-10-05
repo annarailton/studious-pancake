@@ -5,9 +5,9 @@ import numpy as np
 from brute_force_closest_pair import brute_force_closest_pair
 
 def dist_1d(x, y):
-    return abs(x - y)
+    return np.linalg.norm(np.array(x) - np.array(y))
 
-def closest_pair(points, dist=dist_1d):
+def closest_pair_1d(points, dist=dist_1d):
     """
     Divide and conquer implementation of closest pair algorithm.
 
@@ -26,8 +26,8 @@ def closest_pair(points, dist=dist_1d):
     lower = [p for p in points if p < median]
     upper = list(set(points) - set(lower))
 
-    min_distance1, min_points1 = closest_pair(list(lower))
-    min_distance2, min_points2 = closest_pair(list(upper))
+    min_distance1, min_points1 = closest_pair_1d(lower)
+    min_distance2, min_points2 = closest_pair_1d(upper)
 
     # Find points closest to m in lower and upper
     lower_m = lower[np.argmin([dist(x, median) for x in lower])]
@@ -39,7 +39,7 @@ def closest_pair(points, dist=dist_1d):
     dist_to_points = {  # to recover pair of points
         min_distance1: min_points1,
         min_distance2: min_points2,
-        min_distance_cut: set([lower_m, upper_m])
+        min_distance_cut: tuple([lower_m, upper_m])
     }
     min_distance = min(min_distance1, min_distance2, min_distance_cut)
     min_points = dist_to_points[min_distance]
@@ -50,7 +50,7 @@ def closest_pair(points, dist=dist_1d):
 def main():
     points = np.random.rand(20)
     print(brute_force_closest_pair(points, dist=dist_1d))
-    print(closest_pair(points))
+    print(closest_pair_1d(points))
 
 
 if __name__ == '__main__':
