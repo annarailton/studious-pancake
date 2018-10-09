@@ -1,6 +1,6 @@
+import heapq
 import itertools
 import numpy as np
-import time
 
 from tqdm import tqdm
 
@@ -42,7 +42,7 @@ def brute_force_closest_pair(points, dist):
     return min_distance, min_points
 
 
-def brute_force_lazy(points, dist):
+def brute_force_lazy(points, dist=dist_euclidean):
     """
     Brute force closest pair algorithm using lazy evaluation to save on memory
     for big sets of points.
@@ -71,7 +71,42 @@ def brute_force_lazy(points, dist):
     return min_distance, min_points
 
 
+def brute_force_top_k(points, k, dist=dist_euclidean):
+    """
+    Brute force closest pair algorithm using lazy evaluation to save on memory
+    for big sets of points. Stores the top k closest points.
+
+    Args:
+        points (list): list of points with some distance metric between them
+        dist (func): function that takes two points and returns a distance
+
+    Returns:
+        min_distance: minimum distance between points
+        min_points: set of pair of points that are closest_pair
+    """
+    n_pairs = comb(len(points), 2, exact=True)
+    if n_pairs < k:
+        raise ValueError(
+            "Insufficient points ({}) to take top {} distances".format(
+                len(points), k))
+
+    heap = []
+    pairs = itertools.combinations(points, 2)
+    for p in tqdm(pairs, total=n_pairs, desc="brute_force_top_k"):
+        p_dist = dist(*p)
+        if len(heap) < k:  # k is heap capacity
+            heapq.heappush(heap, (-1 * p_dist, p))  # -ve dist as min heap
+        else:
+            # Push item on the heap, then pop and return the smallest item from
+            # the heap (no need to store this)
+            heapq.heappushpop(heap, (-1 * p_dist, p))
+
+    return heap
+
+
 if __name__ == '__main__':
-    points = np.random.random(size=[4000, 3])
-    print(brute_force_lazy(points, dist_euclidean))
+    points = np.random.random(size=[100, 3])
+    print(brute_force_lazy(points))
+    h = brute_force_top_k(points, 10)
+    print([-1 * i[0] for i in h])
     # print(brute_force_closest_pair(points, dist_euclidean))
