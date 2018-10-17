@@ -43,6 +43,8 @@ class KDTree(object):
             self.depth = depth
 
         # Find median by sorting over axis
+        # This could get quite slow for lots of data points - could instead
+        # find the median of a random subset of points?
         median_idx = len(point_list) // 2
         point_list.sort(key=itemgetter(axis))
 
@@ -52,6 +54,21 @@ class KDTree(object):
             left_child=self.build(point_list[:median_idx], depth + 1),
             right_child=self.build(point_list[median_idx + 1:], depth + 1))
 
+    def insert(self, point):
+
+
+    def _insert(self, point, parent_node, cutting_dimension):
+        pass
+
+    def find_min(self, dimension):
+        pass
+
+    def delete(self, point):
+        pass
+
+    def nearest_neighbour(self, point):
+        pass
+
 
 def main():
     """Example usage"""
@@ -59,6 +76,9 @@ def main():
     kdtree = KDTree(point_list)
     print(kdtree.tree)
     print(kdtree.depth)
+    print(kdtree.tree.location)
+
+# TODO Implement the nearest neighbour KD search
 
 
 if __name__ == '__main__':
