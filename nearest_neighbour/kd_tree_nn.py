@@ -55,7 +55,7 @@ class KDTree(object):
             right_child=self.build(point_list[median_idx + 1:], depth + 1))
 
     def insert(self, point):
-
+        pass
 
     def _insert(self, point, parent_node, cutting_dimension):
         pass
